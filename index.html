@@ -1,0 +1,168 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="foodStoreCarousel" class="carousel slide mb-5 shadow-sm overflow-hidden" data-bs-ride="carousel" data-bs-interval="3000" style="margin-top: -3rem; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); width: 100vw; position: relative;">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#foodStoreCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+        <button type="button" data-bs-target="#foodStoreCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#foodStoreCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="text-white text-center d-flex flex-column justify-content-center align-items-center" style="background-color: #386641; min-height: 280px;">
+                <h1 class="fw-bold">Только проверенные поставщики</h1>
+                <p class="lead">Гарантия качества и свежести каждого товара.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="text-white text-center d-flex flex-column justify-content-center align-items-center" style="background-color: #76a81b; min-height: 280px;">
+                <h1 class="fw-bold">Свежие овощи и фрукты</h1>
+                <p class="lead">Доставка прямо к вашему столу за 1 час.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="text-white text-center d-flex flex-column justify-content-center align-items-center" style="background-color: #1c3a27; min-height: 280px;">
+                <h1 class="fw-bold">Акции и скидки до -30%</h1>
+                <p class="lead">Каждую неделю новые выгодные предложения.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#foodStoreCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#foodStoreCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+
+<h3 class="mb-4 fw-bold">Каталог товаров</h3>
+<div class="row row-cols-1 row-cols-md-3 row-cols-sm-2 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden">
+       <div style="background-color: #e2f0d9; height: 200px; padding: 10px;" class="d-flex align-items-center justify-content-center">
+                         {% if product.image_url %}
+        <img src="{{ product.image_url }}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="{{ product.name }}">
+    {% elif "молоко" in product.name|lower %}
+        <img src="{% static 'images/milk.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Молоко">
+    {% elif "сыр" in product.name|lower %}
+        <img src="{% static 'images/cheese.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Сыр">
+    {% elif "колбаса" in product.name|lower %}
+        <img src="{% static 'images/sausage.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Колбаса">
+    {% elif "масло" in product.name|lower %}
+        <img src="{% static 'images/butter.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Масло">
+    {% elif "йогурт" in product.name|lower %}
+        <img src="{% static 'images/yogurt.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Йогурт">
+    {% elif "творог" in product.name|lower %}
+        <img src="{% static 'images/curd_cheese.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Творог">
+    {% elif "кефир" in product.name|lower %}
+        <img src="{% static 'images/kefir.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Кефир">
+    {% elif "ряженка" in product.name|lower %}
+        <img src="{% static 'images/ryazhenka.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Ряженка">
+    {% elif "пельмени" in product.name|lower %}
+        <img src="{% static 'images/pelmeni.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Пельмени">
+    {% elif "вареники" in product.name|lower or "дамплинг" in product.name|lower %}
+        <img src="{% static 'images/dumplings.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Вареники">
+    {% elif "хлеб" in product.name|lower or "батон" in product.name|lower %}
+        <img src="{% static 'images/bread.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Хлеб">
+    {% elif "макароны" in product.name|lower or "паста" in product.name|lower %}
+        <img src="{% static 'images/pasta.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Макароны">
+    {% elif "рис" in product.name|lower %}
+        <img src="{% static 'images/rice.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Рис">
+    {% elif "гречка" in product.name|lower %}
+        <img src="{% static 'images/buckwheat.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Гречка">
+    {% elif "мука" in product.name|lower %}
+        <img src="{% static 'images/flour.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Мука">
+    {% elif "сахар" in product.name|lower %}
+        <img src="{% static 'images/sugar.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Сахар">
+    {% elif "соль" in product.name|lower %}
+        <img src="{% static 'images/salt.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Соль">
+    {% elif "вафли" in product.name|lower %}
+        <img src="{% static 'images/waffles.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Вафли">
+    {% elif "конфеты" in product.name|lower %}
+        <img src="{% static 'images/candies.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Конфеты">
+    {% elif "шоколад" in product.name|lower %}
+        <img src="{% static 'images/chocolate.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Шоколад">
+    {% elif "печенье" in product.name|lower %}
+        <img src="{% static 'images/cookie.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Печенье">
+    {% elif "мороженое" in product.name|lower %}
+        <img src="{% static 'images/ice_cream.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Мороженое">
+    {% elif "кофе" in product.name|lower %}
+        <img src="{% static 'images/coffee.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Кофе">
+    {% elif "чай" in product.name|lower %}
+        <img src="{% static 'images/tea.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Чай">
+    {% elif "вода" in product.name|lower %}
+        <img src="{% static 'images/water.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Вода">
+    {% elif "яблоко" in product.name|lower or "фрукты" in product.name|lower %}
+        <img src="{% static 'images/apple.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Яблоко">
+    {% elif "овощи" in product.name|lower %}
+        <img src="{% static 'images/vegetables.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Овощи">
+    {% elif "сметана" in product.name|lower %}
+        <img src="{% static 'images/sour_cream.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Сметана">
+    {% elif "подсолнечное" in product.name|lower or "растительное" in product.name|lower %}
+        <img src="{% static 'images/oil.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Масло">
+    {% elif "яйца" in product.name|lower or "яйцо" in product.name|lower %}
+        <img src="{% static 'images/egg.png' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Яйца">
+    {% else %}
+        <img src="{% static 'images/vegetables.jpg' %}" style="max-height: 100%; max-width: 100%; object-fit: contain; border-radius: 6px;" alt="Продукт">
+    {% endif %}
+</div> 
+            <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted small">Категория: {{ product.category }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="fs-5 fw-bold text-success">{{ product.price }} ₽</span>
+                        
+                        {% if request.session.user_id %}
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'create_order' %}?product_id={{ product.id }}" class="btn btn-success">Купить</a>
+                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success">🛒 +</a>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-sm btn-outline-secondary px-3 rounded-pill">Вход</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="mt-3">
+    <form action="{% url 'add_review' product.id %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="text" class="form-control" placeholder="Ваш отзыв..." required>
+        <button type="submit" class="btn btn-sm btn-primary mt-1">Отправить</button>
+    </form>
+</div>
+<div class="mt-3 p-2 bg-light rounded" style="text-align: left;">
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.85rem;">Отзывы:</h6>
+            
+            <div class="reviews-list mb-2" style="max-height: 100px; overflow-y: auto;">
+                {% for review in product.feedbacks_set.all %}
+                    <div class="border-bottom mb-1 pb-1 text-muted" style="font-size: 0.8rem;">
+                        {{ review.comment }}
+                    </div>
+                {% empty %}
+                    <span class="text-muted d-block" style="font-size: 0.75rem;">Отзывов пока нет. Будьте первым!</span>
+                {% endfor %}
+            </div>
+
+            {% if request.session.user_id %}
+                <form action="{% url 'add_review' product.id %}" method="POST" class="d-flex gap-1 mt-1">
+                    {% csrf_token %}
+                    <input type="text" name="text" class="form-control form-control-sm" placeholder="Напишите отзыв..." required style="font-size: 0.75rem;">
+                    <button type="submit" class="btn btn-sm btn-primary py-0 px-2">✔</button>
+                </form>
+            {% else %}
+                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+                    <a href="{% url 'login' %}" class="text-decoration-none">Войдите</a>, чтобы оставить отзыв.
+                </small>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center text-muted my-5">
+        <h5>В этой категории пока нет товаров.</h5>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

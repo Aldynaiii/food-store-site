@@ -1,0 +1,47 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm border-0 bg-light">
+                <h4 class="fw-bold mb-3">Личный кабинет</h4>
+                <p><strong>Ваш логин:</strong> {{ request.session.user_login }}</p>
+                <p><strong>Статус:</strong> {{ request.session.user_role|title }}</p>
+                <hr>
+                <a href="{% url 'logout' %}" class="btn btn-danger btn-sm w-100">Выйти из аккаунта</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h4 class="fw-bold mb-4">История ваших заказов</h4>
+            
+            {% if orders %}
+                {% for order in orders %}
+                    <div class="card mb-3 shadow-sm border-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h5 class="fw-bold text-success m-0">Заказ № {{ order.order_number }}</h5>
+                                <span class="badge bg-warning text-dark p-2">{{ order.status }}</span>
+                            </div>
+                            <p class="mb-1 text-muted">Дата доставки: {{ order.delivery_date }}</p>
+                            <p class="mb-2 text-muted">Способ оплаты: {{ order.payment_method }}</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="fw-bold">Сумма заказа: {{ order.total_amount }} руб.</span>
+                                
+                                {% if order.status == 'Завершено' or order.status == 'Завершен' %}
+                                    <a href="{% url 'leave_feedback' order.id %}" class="btn btn-outline-success btn-sm">Оставить отзыв</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center">
+                    Вы ещё не создали ни одного заказа. Самое время что-нибудь <a href="/" class="alert-link">купить</a>!
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

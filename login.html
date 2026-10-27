@@ -1,0 +1,68 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<style>
+    .auth-card {
+        max-width: 420px;
+        width: 100%;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 16px;
+    }
+    .auth-card form p {
+        margin-bottom: 1.1rem;
+    }
+    .auth-card label {
+        display: block;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 6px;
+        font-size: 0.92rem;
+    }
+    .auth-card input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .auth-card input:focus {
+        outline: none;
+        border-color: #76a81b;
+        box-shadow: 0 0 0 3px rgba(118, 168, 27, 0.15);
+    }
+    .auth-card .errorlist {
+        color: #dc3545;
+        font-size: 0.85rem;
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 0;
+    }
+</style>
+
+<div class="d-flex justify-content-center py-5 px-3">
+    <div class="auth-card card border-0 shadow-sm p-4 p-md-5 animate-fade-in">
+        <h3 class="fw-bold text-success text-center mb-1">  Вход</h3>
+        <p class="text-muted text-center mb-4">Войдите, чтобы продолжить покупки</p>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mt-2">
+                Войти
+            </button>
+        </form>
+
+        <p class="text-center text-muted mt-4 mb-0">
+            Нет аккаунта?
+            <a href="{% url 'register' %}" class="text-success fw-semibold">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

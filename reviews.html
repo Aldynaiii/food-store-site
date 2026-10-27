@@ -1,0 +1,187 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+    /* Анимация плавного появления элементов */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .rating-star {
+        color: #ffc107;
+    }
+    
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+</style>
+
+<div class="container py-5 animate-fade-in">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-dark">💬 Отзывы и предложения</h1>
+        <p class="text-muted mx-auto" style="max-width: 600px;">
+            Мы ценим мнение каждого клиента! Поделитесь своими впечатлениями о качестве наших продуктов питания и уровне сервиса.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm p-4 bg-white position-sticky" style="top: 30px;">
+                <h4 class="fw-bold text-success mb-3">✍️ Оставить отзыв</h4>
+                
+                <form id="reviewForm" onsubmit="submitReview(event)">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="reviewerName" class="form-label fw-semibold text-secondary">Ваше имя</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                            <input type="text" class="form-control bg-light border-start-0 ps-0" id="reviewerName" placeholder="Например, Алтынай" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="reviewRating" class="form-label fw-semibold text-secondary">Оценка сервиса</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-star"></i></span>
+                            <select class="form-select bg-light border-start-0 ps-0" id="reviewRating" required>
+                                <option value="" disabled selected>Выберите оценку...</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Отлично (Всё свежее)</option>
+                                <option value="4">⭐⭐⭐⭐ Хорошо (Быстрая доставка)</option>
+                                <option value="3">⭐⭐⭐ Удовлетворительно</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="reviewText" class="form-label fw-semibold text-secondary">Ваш отзыв</label>
+                        <textarea class="form-control bg-light" id="reviewText" rows="4" placeholder="Напишите, что вам понравилось больше всего..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2.5 rounded-3 fw-bold shadow-sm">
+                        Отправить отзыв <i class="bi bi-send ms-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <h4 class="fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+                Последние отзывы <span class="badge bg-success-subtle text-success rounded-pill px-3 py-1 fs-6" id="reviewCount">2</span>
+            </h4>
+            
+            <div id="reviewsList" class="d-flex flex-column gap-3">
+                <div class="card border-0 shadow-sm p-4 bg-white animate-fade-in">
+                    <div class="d-flex justify-content-between align-items-start mb-2"><div>
+                            <h6 class="fw-bold text-dark mb-1">Алтынай Омаровна</h6>
+                            <div class="rating-star small">⭐⭐⭐⭐⭐</div>
+                        </div>
+                        <span class="text-muted small bg-light px-2 py-1 rounded">Сегодня</span>
+                    </div>
+                    <p class="text-secondary mb-0 small">
+                        Заказывала свежее молоко, фрукты и бородинский хлеб. Привезли очень быстро, продукты идеально упакованы. Большое спасибо за отличный сервис!
+                    </p>
+                </div>
+
+                <div class="card border-0 shadow-sm p-4 bg-white animate-fade-in">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-1">Дмитрий К.</h6>
+                            <div class="rating-star small">⭐⭐⭐⭐</div>
+                        </div>
+                        <span class="text-muted small bg-light px-2 py-1 rounded">Вчера</span>
+                    </div>
+                    <p class="text-secondary mb-0 small">
+                        Очень радует большой выбор категорий товаров на главной странице. Доставка в пункт выдачи приехала ровно в назначенное время, без опозданий.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0 rounded-3 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center gap-2">
+                <i class="bi bi-check-circle-fill fs-5"></i>
+                <div><strong>Успешно!</strong> Ваш отзыв отправлен и добавлен в список.</div>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentCount = 2;
+
+    function submitReview(event) {
+        event.preventDefault();
+
+        // 1. Извлекаем данные из полей формы
+        const name = document.getElementById('reviewerName').value.trim();
+        const ratingVal = document.getElementById('reviewRating').value;
+        const text = document.getElementById('reviewText').value.trim();
+
+        // Формируем текстовые звездочки в зависимости от выбора
+        let stars = '';
+        for (let i = 0; i < parseInt(ratingVal); i++) {
+            stars += '⭐';
+        }
+
+        // 2. Создаем новую карточку отзыва с плавной анимацией появления
+        const newReview = document.createElement('div');
+        newReview.className = 'card border-0 shadow-sm p-4 bg-white animate-fade-in';
+        newReview.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h6 class="fw-bold text-dark mb-1">${name}</h6>
+                    <div class="rating-star small">${stars}</div>
+                </div>
+                <span class="text-muted small bg-light px-2 py-1 rounded">Только что</span>
+            </div>
+            <p class="text-secondary mb-0 small">${text}</p>
+        `;
+
+        // Вставляем новый отзыв в самый верх списка справа
+        const list = document.getElementById('reviewsList');
+        list.insertBefore(newReview, list.firstChild);
+
+        // Обновляем счетчик отзывов на странице
+        currentCount++;
+        document.getElementById('reviewCount').innerText = currentCount;
+
+        // 3. Вызываем встроенное всплывающее окно Bootstrap (Toast)
+        const toastElement = document.getElementById('successToast');
+        if (typeof bootstrap !== 'undefined') {
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        } else {
+            // Резервный вариант отображения, если Bootstrap JS не успел загрузиться
+            toastElement.classList.add('show');
+            setTimeout(() => toastElement.classList.remove('show'), 4000);
+        }
+
+        // Полностью очищаем поля формы после успешной отправки
+        document.getElementById('reviewForm').reset();
+    }
+</script>
+{% endblock %}

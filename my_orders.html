@@ -1,0 +1,97 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<style>
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    
+    @media (max-width: 576px) {
+        .orders-table-header {
+            display: none; 
+        }
+        .order-card {
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745 !important;
+        }
+    }
+</style>
+
+<div class="container py-3 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold mb-0">  Мои заказы</h2>
+    </div>
+
+    <div class="d-none d-md-block card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 px-4">Номер заказа</th>
+                        <th class="py-3">Дата заказа</th>
+                        <th class="py-3">Дата доставки</th>
+                        <th class="py-3">Пункт выдачи</th>
+                        <th class="py-3">Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="py-3 px-4 fw-bold text-success">#{{ order.order_number }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.delivery_date }}</td>
+                        <td><div class="small fw-semibold">{{ order.pickup_point.address }}</div></td>
+                        <td>
+                            {% if order.status == "Завершен" %}
+                                <span class="badge bg-success rounded-pill px-3 py-2">Завершен</span>
+                            {% elif order.status == "В обработке" %}
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">В обработке</span>
+                            {% else %}
+                                <span class="badge bg-primary rounded-pill px-3 py-2">{{ order.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <span style="font-size: 3rem;">🛒</span>
+                            <p class="mt-2 mb-0">У вас пока нет оформленных заказов в базе данных.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-block d-md-none">
+        {% for order in orders %}
+        <div class="card order-card border-0 shadow-sm rounded-3 p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="fw-bold text-success">#{{ order.order_number }}</span>
+                <span class="badge bg-primary rounded-pill">{{ order.status }}</span>
+            </div>
+            <p class="mb-1 text-muted small"><strong>Дата доставки:</strong> {{ order.delivery_date }}</p>
+            <p class="mb-1 text-muted small"><strong>Адрес:</strong> {{ order.PickupPointId }}</p>
+        </div>
+        {% empty %}
+        <div class="text-center py-4 text-muted">
+            <p>Заказы не найдены.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<style>
+    .order-card {
+        max-width: 520px;
+        width: 100%;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 16px;
+    }
+    .order-card label {
+        display: block;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 6px;
+        font-size: 0.92rem;
+    }
+    .order-card select,
+    .order-card input {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 1.1rem;
+        background-color: #fff;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .order-card select:focus,
+    .order-card input:focus {
+        outline: none;
+        border-color: #76a81b;
+        box-shadow: 0 0 0 3px rgba(118, 168, 27, 0.15);
+    }
+    /* Виджет выбора даты (3 select подряд) - ставим в один ряд */
+    .order-card .date-row select {
+        width: auto;
+        display: inline-block;
+        margin-right: 6px;
+        margin-bottom: 0.3rem;
+    }
+    .order-card .errorlist {
+        color: #dc3545;
+        font-size: 0.85rem;
+        list-style: none;
+        padding: 0;
+        margin: -6px 0 10px;
+    }
+</style>
+
+<div class="d-flex justify-content-center py-5 px-3">
+    <div class="order-card card border-0 shadow-sm p-4 p-md-5 animate-fade-in">
+        <h3 class="fw-bold text-success text-center mb-1"> Оформление заказа</h3>
+        <p class="text-muted text-center mb-4">Заполните данные, и мы доставим заказ вовремя</p>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_product">Товар</label>
+            <select name="product" id="id_product" required>
+                {% for product in form.product.field.queryset %}
+                    <option value="{{ product.id }}">
+                        {{ product.name }} — {{ product.price }} руб.
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="id_quantity">Количество</label>
+            <input type="number" name="quantity" id="id_quantity" min="1" value="{{ form.quantity.value|default:1 }}">
+            {{ form.quantity.errors }}
+
+            <label for="id_payment_method">Способ оплаты</label>
+            <select name="payment_method" id="id_payment_method">
+                <option value="cash">Наличные</option>
+                <option value="card">Карта</option>
+            </select>
+
+            <label>Дата доставки</label>
+            <div class="date-row mb-3">
+                {{ form.delivery_date }}
+            </div>
+            {{ form.delivery_date.errors }}
+
+            <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mt-2">
+                Оформить заказ
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
